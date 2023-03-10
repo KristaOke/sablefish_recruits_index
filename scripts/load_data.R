@@ -186,13 +186,30 @@ zsbllong <- zsbl %>% pivot_longer(values_to = "value", names_to = "indicator", -
 
 ggplot(zsbllong, aes(value)) + geom_histogram() + facet_wrap(~indicator, scales="free")
 
+zsbl <- zsbl[,c("YEAR",
+  "Annual_Sablefish_Growth_YOY_Middleton_Survey_zscor"  ,           
+   "Spring_Temperature_Surface_EGOA_Satellite_zscor" ,               
+   "Spring_Temperature_Surface_GOA_Satellite_zscor" ,                
+   "Spring_Temperature_Surface_SEBS_Satellite_zscor",                
+   "Summer_Temperature_250m_GOA_Survey_zscor",                       
+   "Spring_Chlorophylla_Biomass_EGOA_Satellite_zscor",               
+   "Spring_Chlorophylla_Biomass_GOA_Satellite_zscor",                
+   "Spring_Chlorophylla_Biomass_SEBS_Satellite_zscor",               
+   "Annual_Copepod_Community_Size_EGOA_Survey_zscor",                
+   "Annual_Copepod_Community_Size_WGOA_Survey_zscor",                
+   "log_Annual_Heatwave_GOA_Model_zscor",                            
+   "log_Summer_Sablefish_CPUE_Juvenile_GOA_Survey_zscor",            
+   "log_Summer_Sablefish_CPUE_Juvenile_Nearshore_GOAAI_Survey_zscor"
+)]
 
 #join datasets together------
 
+zbirdsub <- zbirddat[,c("year", "logCPUE_zscor", "pred_len_zscor")]
+
+allbirds <- left_join(zbirdtempwide, zbirdsub)
 
 
-
-
+alldats <- left_join(allbirds, zsbl, by=c("year" = "YEAR"))
 
 
 
