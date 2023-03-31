@@ -47,7 +47,7 @@ model.data = data.frame()
 for(R in levels.R) {
   for(m in 1:4) {  # allowing up to 3 trends
     dfa.model = list(A="zero", R=R, m=m)
-    kemz = MARSS(all.mat, model=dfa.model, control=cntl.list,
+    kemz = MARSS(all1.mat, model=dfa.model, control=cntl.list,
                  form="dfa", z.score=TRUE)
     model.data = rbind(model.data,
                        data.frame(R=R,
@@ -73,7 +73,7 @@ model.data
 # now fit best model
 
 model.list.1 = list(A="zero", m=4, R="diagonal and equal") # best model
-model.1 = MARSS(all.mat, model=model.list.1, z.score=TRUE, form="dfa", control=cntl.list)
+model.1 = MARSS(all1.mat, model=model.list.1, z.score=TRUE, form="dfa", control=cntl.list)
 
 
 # and rotate the loadings
@@ -86,10 +86,10 @@ proc_rot = solve(H_inv) %*% model.1$states #
 # reverse trend 2 to plot
 Z.rot[,2] <- -Z.rot[,2]
 
-Z.rot$names <- rownames(all.mat)
+Z.rot$names <- rownames(all1.mat)
 Z.rot <- arrange(Z.rot, V1)
 Z.rot <- gather(Z.rot[,c(1,2)])
-Z.rot$names <- rownames(all.mat)
+Z.rot$names <- rownames(all1.mat)
 #Z.rot$plot.names <- reorder(Z.rot$names, 1:14)
 
 
@@ -116,9 +116,9 @@ rec.plot <- ggplot(Z.rot, aes(names, value, fill=key)) + geom_bar(stat="identity
 yr_frst <- 1977
 
 ## get number of time series
-N_ts <- dim(all.mat)[1]
+N_ts <- dim(all1.mat)[1]
 ## get length of time series
-TT <- dim(all.mat)[2]
+TT <- dim(all1.mat)[2]
 
 ## get the estimated ZZ
 Z_est <- coef(model.1, type = "matrix")$Z
@@ -132,9 +132,9 @@ proc_rot = solve(H_inv) %*% model.1$states
 
 mm <- 4 #4 processes
 
-rec_names <- rownames(all.mat)
+rec_names <- rownames(all1.mat)
 ylbl <- rec_names
-w_ts <- seq(dim(all.mat)[2])
+w_ts <- seq(dim(all1.mat)[2])
 layout(matrix(c(1, 2, 3, 4, 5, 6,7,8), mm, 2), widths = c(2, 1))
 ## par(mfcol=c(mm,2), mai=c(0.5,0.5,0.5,0.1), omi=c(0,0,0,0))
 # jpeg("figs/ugly_DFA_trends_loadings.jpg")
@@ -154,7 +154,7 @@ for (i in 1:mm) {
   ## add panel labels
   mtext(paste("State", i), side = 3, line = 0.5)
   #axis(1, 12 * (0:dim(all.clim.dat)[2]) + 1, yr_frst + 0:dim(all.clim.dat)[2])
-  axis(1, 1:42, yr_frst + 0:dim(all.mat)[2])
+  axis(1, 1:42, yr_frst + 0:dim(all1.mat)[2])
 }
 ## plot the loadings
 clr <- c("brown", 
