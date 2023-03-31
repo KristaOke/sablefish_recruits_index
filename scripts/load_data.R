@@ -229,8 +229,7 @@ scaled_dfa_dat <- scaled_dat[,c(1,18,24:43)]
 
 #select covariates of interest=====
 
-#DFA can handle missing data but there is still too much missing in euphasiid data
-#remove the mean age and evenness indicators
+#selecting out ONLY covariates we've discussed as being of interest for the index
 
 select_dfa_dat <- scaled_dfa_dat[,names(scaled_dfa_dat) %in% c("Year", "ln_rec",
   "ann_heatwave_GOA_scaled",                                           
