@@ -249,14 +249,35 @@ zbirdsub <- zbirddat[,c("year", "logCPUE_zscor", "pred_len_zscor")]
 
 allbirds <- left_join(zbirdtempwide, zbirdsub)
 
+#must be biggest dataset first to retain years not in shorter dataset
+alldats <- left_join(select_dfa_dat, allbirds,  by=c("Year" = "year"))
 
-alldats <- left_join(allbirds, select_dfa_dat, by=c("year" = "Year"))
+#NOW JOIN TO TRAINING AND TESTING
+#to pull out same years used in training and testing sets for other proj
 
-# joined_train1 <- left_join(allbirds, train5_dfa_dat, by=c("year" = "Year"))
-# innjoined_train1 <- inner_join(allbirds, train5_dfa_dat, by=c("year" = "Year")) #this removes early years
-#because they aren't in the bird data
+train1yrs <- train1[,names(train1) %in% c("Year", "ln_rec")]
+train2yrs <- train2[,names(train2) %in% c("Year", "ln_rec")]
+train3yrs <- train3[,names(train3) %in% c("Year", "ln_rec")]
+train4yrs <- train4[,names(train4) %in% c("Year", "ln_rec")]
+train5yrs <- train5[,names(train5) %in% c("Year", "ln_rec")]
 
-#ah, the problem is that this leaves the testing yrs in just with NAs for indicators
-#perhaps join to whole dataset then select out training and testing data using a inner join
+test1yrs <- testing1[,names(testing1) %in% c("Year", "ln_rec")]
+test2yrs <- testing2[,names(testing2) %in% c("Year", "ln_rec")]
+test3yrs <- testing3[,names(testing3) %in% c("Year", "ln_rec")]
+test4yrs <- testing4[,names(testing4) %in% c("Year", "ln_rec")]
+test5yrs <- testing5[,names(testing5) %in% c("Year", "ln_rec")]
+
+alltrain1 <- inner_join(train1yrs, alldats,  by=c("Year" = "Year"))
+alltrain2 <- inner_join(train2yrs, alldats,  by=c("Year" = "Year"))
+alltrain3 <- inner_join(train3yrs, alldats,  by=c("Year" = "Year"))
+alltrain4 <- inner_join(train4yrs, alldats,  by=c("Year" = "Year"))
+alltrain5 <- inner_join(train5yrs, alldats,  by=c("Year" = "Year"))
+
+alltest1 <- inner_join(test1yrs, alldats,  by=c("Year" = "Year"))
+alltest2 <- inner_join(test2yrs, alldats,  by=c("Year" = "Year"))
+alltest3 <- inner_join(test3yrs, alldats,  by=c("Year" = "Year"))
+alltest4 <- inner_join(test4yrs, alldats,  by=c("Year" = "Year"))
+alltest5 <- inner_join(test5yrs, alldats,  by=c("Year" = "Year"))
+
 
 
