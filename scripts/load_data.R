@@ -267,7 +267,7 @@ test3yrs <- testing3[,names(testing3) %in% c("Year", "ln_rec")]
 test4yrs <- testing4[,names(testing4) %in% c("Year", "ln_rec")]
 test5yrs <- testing5[,names(testing5) %in% c("Year", "ln_rec")]
 
-alltrain1 <- inner_join(train1yrs, alldats,  by=c("Year" = "Year"))
+alltrain1 <- inner_join(train1yrs, alldats,  by=c("Year" = "Year", "ln_rec"="ln_rec"))
 alltrain2 <- inner_join(train2yrs, alldats,  by=c("Year" = "Year"))
 alltrain3 <- inner_join(train3yrs, alldats,  by=c("Year" = "Year"))
 alltrain4 <- inner_join(train4yrs, alldats,  by=c("Year" = "Year"))
@@ -278,6 +278,5 @@ alltest2 <- inner_join(test2yrs, alldats,  by=c("Year" = "Year"))
 alltest3 <- inner_join(test3yrs, alldats,  by=c("Year" = "Year"))
 alltest4 <- inner_join(test4yrs, alldats,  by=c("Year" = "Year"))
 alltest5 <- inner_join(test5yrs, alldats,  by=c("Year" = "Year"))
-
 
 
