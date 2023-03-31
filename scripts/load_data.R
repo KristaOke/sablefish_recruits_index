@@ -13,7 +13,7 @@
 library(tidyverse)
 library(corrplot)
 library(AKesp)
-devtools::install_local("C:/Users/Krista.Oke/Analyses/Getting started/AKesp-main.zip")
+#devtools::install_local("C:/Users/Krista.Oke/Analyses/Getting started/AKesp-main.zip")
 
 
 #=============================================================
@@ -53,7 +53,7 @@ expore.hist <- ggplot(bird.list, aes(x=value, fill=type)) +
   theme(legend.position = "NA")
 expore.hist
 #most pretty normal, CPUE is not so log
-birddat$log_CPUE <- log(birddat$CPUE)
+birddat$log_CPUE <- log(birddat$CPUE+1)
 
 
 zbirddat <- birddat %>% #group_by(Year) %>%
@@ -202,6 +202,47 @@ zsbl <- zsbl[,c("YEAR",
    "log_Summer_Sablefish_CPUE_Juvenile_Nearshore_GOAAI_Survey_zscor"
 )]
 
+
+#get training and testing from sablefish_indicators project------------------------------
+
+
+# load data
+train1 <- read.csv(file=paste(wd,"/data/dataset_training1.csv", sep=""), row.names = 1)
+train2 <- read.csv(file=paste(wd,"/data/dataset_training2.csv", sep=""), row.names = 1)
+train3 <- read.csv(file=paste(wd,"/data/dataset_training3.csv", sep=""), row.names = 1)
+train4 <- read.csv(file=paste(wd,"/data/dataset_training4.csv", sep=""), row.names = 1)
+train5 <- read.csv(file=paste(wd,"/data/dataset_training5.csv", sep=""), row.names = 1)
+
+testing1 <- read.csv(file=paste(wd,"/data/dataset_testing1.csv", sep=""), row.names = 1)
+testing2 <- read.csv(file=paste(wd,"/data/dataset_testing2.csv", sep=""), row.names = 1)
+testing3 <- read.csv(file=paste(wd,"/data/dataset_testing3.csv", sep=""), row.names = 1)
+testing4 <- read.csv(file=paste(wd,"/data/dataset_testing4.csv", sep=""), row.names = 1)
+testing5 <- read.csv(file=paste(wd,"/data/dataset_testing5.csv", sep=""), row.names = 1)
+
+scaled_dat <- read.csv( file=paste(wd,"/data/whole_dataset_scaled.csv", sep=""), row.names = 1)
+
+#DATA CONTROL SECTION----
+
+#select the z-scored columns,  b/c dfa needs z-scored
+scaled_dfa_dat <- scaled_dat[,c(1,18,24:43)]
+
+
+#select covariates of interest=====
+
+#DFA can handle missing data but there is still too much missing in euphasiid data
+#remove the mean age and evenness indicators
+
+select_dfa_dat <- scaled_dfa_dat[,names(scaled_dfa_dat) %in% c("Year", "ln_rec",
+  "ann_heatwave_GOA_scaled",                                           
+                                                                "Spr_ST_GOA_scaled",                                                 
+                                                                "Spr_ST_SEBS_scaled",                                                
+                                                                "Smr_temp_250m_GOA_scaled",
+                                                               "Smr_CPUE_juv_ADFG_ln_scaled",                                       
+                                                                "Smr_CPUE_juv_GOA_ln_scaled",
+                                                               "sablefish_bycatch_arrowtooth_fishery_scaled",
+                                                               "YOY_grwth_Middleton_scaled")]
+
+
 #join datasets together------
 
 zbirdsub <- zbirddat[,c("year", "logCPUE_zscor", "pred_len_zscor")]
@@ -209,9 +250,13 @@ zbirdsub <- zbirddat[,c("year", "logCPUE_zscor", "pred_len_zscor")]
 allbirds <- left_join(zbirdtempwide, zbirdsub)
 
 
-alldats <- left_join(allbirds, zsbl, by=c("year" = "YEAR"))
+alldats <- left_join(allbirds, select_dfa_dat, by=c("year" = "Year"))
 
+# joined_train1 <- left_join(allbirds, train5_dfa_dat, by=c("year" = "Year"))
+# innjoined_train1 <- inner_join(allbirds, train5_dfa_dat, by=c("year" = "Year")) #this removes early years
+#because they aren't in the bird data
 
-
+#ah, the problem is that this leaves the testing yrs in just with NAs for indicators
+#perhaps join to whole dataset then select out training and testing data using a inner join
 
 

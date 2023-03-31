@@ -22,7 +22,7 @@ library(cowplot)
 
 #manupulate data for DFA========
 
-all.mat <- t(as.matrix(alldats))
+all.mat <- t(as.matrix(alldats[,-c(15,16)])) #pull out ln_rec and one of the middleton growth metrics
 colnames(all.mat) <- all.mat[1,]
 all.mat <- all.mat[-1,]
 
