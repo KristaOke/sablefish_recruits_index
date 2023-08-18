@@ -248,6 +248,7 @@ zbirdsub <- zbirddat[,c("year", "logCPUE_zscor", "pred_len_zscor")]
 
 allbirds <- left_join(zbirdtempwide, zbirdsub)
 
+
 #must be biggest dataset first to retain years not in shorter dataset
 alldats <- left_join(select_dfa_dat, allbirds,  by=c("Year" = "year"))
 

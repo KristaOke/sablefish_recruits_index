@@ -22,7 +22,7 @@ library(cowplot)
 
 #manupulate data for DFA========
 
-all1.mat <- t(as.matrix(alltrain1[,!names(alltrain1) %in% c("Year", "ln_rec")])) #pull out ln_rec and one of the middleton growth metrics
+all1.mat <- t(as.matrix(alldats[,!names(alldats) %in% "ln_rec"])) #pull out ln_rec and one of the middleton growth metrics
 colnames(all1.mat) <- all1.mat[1,]
 all1.mat <- all1.mat[-1,]
 
@@ -34,7 +34,7 @@ all1.mat <- all1.mat[-1,]
 # now fit DFA models with 1-3 trends and different error structures and compare
 
 # changing convergence criterion to ensure convergence
-cntl.list = list(minit=200, maxit=20000, allow.degen=FALSE, conv.test.slope.tol=0.1, abstol=0.0001)
+cntl.list = list(minit=200, maxit=30000, allow.degen=FALSE, conv.test.slope.tol=0.1, abstol=0.0001)
 
 # set up forms of R matrices
 levels.R = c("diagonal and equal",
